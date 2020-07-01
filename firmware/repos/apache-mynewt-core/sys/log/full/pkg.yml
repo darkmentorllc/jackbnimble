@@ -1,0 +1,66 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+# 
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+pkg.name: sys/log/full
+pkg.description: Logging utilities for embedded systems.
+pkg.author: "Apache Mynewt <dev@mynewt.apache.org>"
+pkg.homepage: "http://mynewt.apache.org/"
+pkg.keywords:
+    - logging
+
+pkg.deps:
+    - "@apache-mynewt-core/kernel/os"
+    - "@apache-mynewt-core/sys/flash_map"
+    - "@apache-mynewt-core/sys/log/common"
+    - "@apache-mynewt-core/util/cbmem"
+
+pkg.deps.LOG_FCB:
+    - "@apache-mynewt-core/hw/hal"
+    - "@apache-mynewt-core/fs/fcb"
+pkg.deps.LOG_FCB2:
+    - "@apache-mynewt-core/fs/fcb2"
+pkg.deps.LOG_CLI:
+    - "@apache-mynewt-core/sys/log/util/log_cbor_reader"
+    - "@apache-mynewt-core/sys/shell"
+    - "@apache-mynewt-core/encoding/base64"
+    - "@apache-mynewt-core/encoding/tinycbor"
+
+pkg.deps.LOG_CONSOLE:
+    - "@apache-mynewt-mcumgr/cborattr"
+    - "@apache-mynewt-core/encoding/tinycbor"
+
+pkg.deps.LOG_MGMT:
+    - "@apache-mynewt-mcumgr/cmd/log_mgmt"
+    - "@apache-mynewt-mcumgr/cborattr"
+    - "@apache-mynewt-core/encoding/tinycbor"
+
+pkg.deps.LOG_FLAGS_IMAGE_HASH:
+    - "@apache-mynewt-core/mgmt/imgmgr"
+
+pkg.deps.LOG_STORAGE_WATERMARK:
+    - sys/config
+
+pkg.apis:
+    - log
+
+pkg.req_apis.LOG_STATS:
+    - stats
+
+pkg.init:
+    log_init: 'MYNEWT_VAL(LOG_SYSINIT_STAGE_MAIN)'

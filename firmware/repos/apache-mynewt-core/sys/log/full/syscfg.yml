@@ -1,0 +1,149 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+syscfg.defs:
+    LOG_FULL:
+        description: >
+            Indicates that the full logging facility (not the stub) is present.
+            This setting should not be overridden.
+        value: 1
+
+    LOG_VERSION:
+        description: 'Log entry header version used.'
+        value: 3
+
+    LOG_LEVEL:
+        description: 'Limits what level log messages are compiled in.'
+        value: 0
+
+    LOG_FLAGS_IMAGE_HASH:
+        description: >
+            Enable logging of the first 4 bytes of the image hash. 0 - disable; 
+            1 - enable.
+        value: 0
+
+    LOG_FCB:
+        description: 'Support logging to FCB.'
+        value: 0
+        restrictions:
+            - "!LOG_FCB2"
+
+    LOG_FCB2:
+        description: 'Support logging to FCB2.'
+        value: 0
+        restrictions:
+            - "!LOG_FCB"
+
+    LOG_FCB_BOOKMARKS:
+        description: >
+            Enables the bookmarks optimization for FCB-backed log lookups.  To
+            use this optimization, the application must configure FCB logs with
+            bookmark storage at runtime.
+        value: 0
+        restrictions:
+            - (LOG_FCB || LOG_FCB2)
+
+    LOG_CONSOLE:
+        description: 'Support logging to console.'
+        value: 1
+
+    LOG_CLI:
+        description: 'Expose "log" command in shell.'
+        value: 0
+        restrictions:
+            - SHELL_TASK
+
+    LOG_MGMT:
+        description: 'Expose "log" command in mgmt.'
+        value: 0
+
+    LOG_NEWTMGR:
+        description: 'Expose "log" command in newtmgr.'
+        value: 0
+
+    LOG_NMGR_MAX_RSP_LEN:
+        description: >
+            The maximum newtmgr log response length. Note that this does not
+            represent the entire length of the response sent as the response
+            error code is added to the response after this check is performed.
+            If a single log entry exceeds this value the msg contents of the
+            log entry will be the following string: error: entry too large
+            (xxx bytes) with xxx being the size of the entry. Note that the
+            value of 400 is a legacy hard-coded value that the code used to
+            limit the size of a response with multiple entries although the
+            previous code did not limit the size of a response with only one
+            entry in it.
+        value: 400
+
+    LOG_MAX_USER_MODULES:
+        description: 'Maximum number of user modules to register'
+        value: 1
+
+    LOG_MODULE_LEVELS:
+        description: >
+            Enables global configuration of minimum log level by module ID.
+            Writes with a level less than the module's minimum level are
+            discarded.  Enabling this setting requires 128 bytes of bss.
+        value: 1
+
+    LOG_STATS:
+        description: 'Log statistics'
+        value: 0
+
+    LOG_STORAGE_INFO:
+        description: >
+            Enable "storage_info" API which keeps track of log storage usage and
+            can return total number of bytes available for log and number of
+            bytes used by entries in log.
+        value: 0
+
+    LOG_STORAGE_WATERMARK:
+        description: >
+            Enable "set_watermark" API which can watermark log by entry index and
+            thus allow to e.g. keep track of read items in log e.g. (via mgmt).
+            This also extends information returned by "storage_info" to number of
+            bytes used by entries above watermark.
+        value: 0
+        restrictions: LOG_STORAGE_INFO
+
+    LOG_PERSIST_WATERMARK:
+        description: >
+            1 Persist storage of watermarks.
+            0 Do not persist watermarks
+            0 Initializes watermarks to unknown (0xffffffff)
+        value: 1
+
+    LOG_READ_WATERMARK_UPDATE:
+        description: >
+            Enables update of the log watermark after a log read
+        value: 0
+        restrictions: LOG_STORAGE_WATERMARK
+
+    LOG_SYSINIT_STAGE_MAIN:
+        description: >
+            Primary sysinit stage for logging functionality.
+        value: 100
+
+    LOG_FCB_COPY_MAX_ENTRY_LEN:
+        description: >
+            Max entry length that can be copied from one fcb log to another.
+        value: 256
+
+syscfg.vals.LOG_NEWTMGR:
+    LOG_MGMT: MYNEWT_VAL(LOG_MGMT)
