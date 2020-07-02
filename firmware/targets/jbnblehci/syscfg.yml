@@ -1,0 +1,6 @@
+syscfg.vals:
+    LOG_LEVEL: 0
+    BLE_EXT_ADV: 1
+    BLE_EXT_ADV_MAX_SIZE: 1650
+    BLE_LL_CFG_FEAT_LE_2M_PHY: '1'
+    BLE_PUBLIC_DEV_ADDR: "(uint8_t[6]){0x33, 0x22, 0x33, 0x44, 0x55, 0x66}"

@@ -68,6 +68,11 @@ struct ble_hci_ev {
  */
 #define BLE_HCI_NUM_LE_CMDS                 (79)
 
+/* JackBNimBLE OCFs (OGF=0x3F) */
+#define BLE_HCI_OCF_ENABLE_CUSTOM_AC_PDU                (0x0101)
+#define BLE_HCI_OCF_SEND_AC_PDU_PAYLOAD                 (0x0102)
+#define BLE_HCI_OCF_SEND_AC_PDU_HEADER                  (0x0103)
+
 /* List of OCF for Link Control commands (OGF=0x01) */
 #define BLE_HCI_OCF_DISCONNECT_CMD          (0x0006)
 struct ble_hci_lc_disconnect_cp {
@@ -1213,6 +1218,9 @@ struct ble_hci_ev_vendor_debug {
     uint8_t id;
     uint8_t data[0];
 }__attribute__((packed));
+
+/* JackBNimBLE, vendor sub-event ready for the next packet */
+#define BLE_HCI_VS_SUBEV_AC_NEXT_PDU    (0x10)
 
 /* LE sub-event codes */
 #define BLE_HCI_LE_SUBEV_CONN_COMPLETE          (0x01)

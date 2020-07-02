@@ -41,6 +41,9 @@ extern const uint8_t g_ble_ll_supp_cmds[BLE_LL_SUPP_CMD_LEN];
  */
 #define BLE_LL_CFG_NUM_HCI_CMD_PKTS     (1)
 
+/* JackBNimBLE API */
+void ble_ll_hci_ev_request_ac_next_pdu();
+
 typedef void (*ble_ll_hci_post_cmd_complete_cb)(void);
 
 /* Initialize LL HCI */

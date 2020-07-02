@@ -235,6 +235,12 @@ void ble_phy_enable_dtm(void);
 void ble_phy_disable_dtm(void);
 #endif
 
+/* JackBNimBLE APIs */
+void ble_phy_enable_custom_pdu(uint8_t enable);
+uint8_t ble_phy_is_custom_pdu_enabled();
+void ble_phy_set_ac_pdu_payload(uint8_t len, const uint8_t *payload);
+void ble_phy_set_ac_pdu_header(uint8_t header);
+
 #ifdef __cplusplus
 }
 #endif

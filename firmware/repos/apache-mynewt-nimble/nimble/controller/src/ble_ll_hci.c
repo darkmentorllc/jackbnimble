@@ -722,9 +722,11 @@ ble_ll_is_valid_adv_mode(uint8_t ocf)
     case BLE_HCI_OCF_LE_PERIODIC_ADV_SYNC_TRANSFER_PARAMS:
     case BLE_HCI_OCF_LE_SET_DEFAULT_SYNC_TRANSFER_PARAMS:
 #endif
+        /* JackBNimBLE, a workaround because btattach calls a legacy HCI command
         if (hci_adv_mode == ADV_MODE_LEGACY) {
             return false;
         }
+        */
 
         hci_adv_mode = ADV_MODE_EXT;
         break;
@@ -1175,6 +1177,38 @@ ble_ll_hci_le_cmd_proc(const uint8_t *cmdbuf, uint8_t len, uint16_t ocf,
 }
 
 /**
+ * JackBNimBLE HCI commands
+ */
+static int
+ble_ll_hci_vendor_cmd_proc(const uint8_t *cmdbuf, uint8_t len, uint16_t ocf, uint8_t *rsplen,
+                                            ble_ll_hci_post_cmd_complete_cb *cb)
+{
+    int rc;
+
+    /* Assume error; if all pass rc gets set to 0 */
+    rc = BLE_ERR_INV_HCI_CMD_PARMS;
+
+    switch (ocf) {
+    case BLE_HCI_OCF_ENABLE_CUSTOM_AC_PDU:
+        ble_phy_enable_custom_pdu(cmdbuf[0]);
+        rc = BLE_ERR_SUCCESS;
+        break;
+    case BLE_HCI_OCF_SEND_AC_PDU_PAYLOAD:
+        ble_phy_set_ac_pdu_payload(len, cmdbuf);
+        rc = BLE_ERR_SUCCESS;
+        break;
+    case BLE_HCI_OCF_SEND_AC_PDU_HEADER:
+        ble_phy_set_ac_pdu_header(cmdbuf[0]);
+        rc = BLE_ERR_SUCCESS;
+        break;
+    default:
+        rc = BLE_ERR_UNKNOWN_HCI_CMD;
+        break;
+    }
+    return rc;
+}
+
+/**
  * Process a link control command sent from the host to the controller. The HCI
  * command has a 3 byte command header followed by data. The header is:
  *  -> opcode (2 bytes)
@@ -1393,6 +1427,10 @@ ble_ll_hci_cmd_proc(struct ble_npl_event *ev)
         break;
     case BLE_HCI_OGF_LE:
         rc = ble_ll_hci_le_cmd_proc(cmd->data, cmd->length, ocf, rspbuf, &rsplen, &post_cb);
+        break;
+    /* JackBNimBLE: HCI commands belong to Vendor Specific OGF */
+    case BLE_HCI_OGF_VENDOR:
+        rc = ble_ll_hci_vendor_cmd_proc(cmd->data, cmd->length, ocf, &rsplen, &post_cb);
         break;
     default:
         /* XXX: Need to support other OGF. For now, return unsupported */

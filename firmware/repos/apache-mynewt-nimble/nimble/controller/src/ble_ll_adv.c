@@ -1213,7 +1213,12 @@ ble_ll_adv_set_sched(struct ble_ll_adv_sm *advsm)
          * In ADV_EXT_IND we always set only ADI and AUX so the payload length
          * is always 7 bytes.
          */
-        max_usecs = ble_ll_pdu_tx_time_get(7, advsm->pri_phy);
+        // max_usecs = ble_ll_pdu_tx_time_get(7, advsm->pri_phy);
+        /*
+         * JackBNimBLE, increase the allocated time
+         * TODO: It had some issues when connection is required for the data channel packets, revisit this
+         */
+        max_usecs = ble_ll_pdu_tx_time_get(255, advsm->pri_phy);
     }
 #else
     max_usecs = ble_ll_pdu_tx_time_get(advsm->adv_pdu_len, BLE_PHY_MODE_1M);
@@ -4713,6 +4718,14 @@ ble_ll_adv_done(struct ble_ll_adv_sm *advsm)
             }
         }
         resched_pdu = 0;
+
+        /*
+         * JackBNimBLE, create an event to notify the host
+         * that a custom packet had been sent
+         */
+        if (ble_phy_is_custom_pdu_enabled())
+            ble_ll_hci_ev_request_ac_next_pdu();
+
     } else {
         /*
          * Move to next advertising channel. If not in the mask, just

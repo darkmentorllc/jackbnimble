@@ -520,3 +520,21 @@ ble_ll_hci_ev_send_vendor_err(const char *file, uint32_t line)
         ble_ll_hci_event_send(hci_ev);
     }
 }
+
+/*
+ * JackBNimBLE, create an event to signal the host that
+ * a custom advertisement packet has been sent and it's ready to get
+ * a new advertisement packet
+ */
+void ble_ll_hci_ev_request_ac_next_pdu()
+{
+    struct ble_hci_ev *hci_ev;
+
+    hci_ev = (void *) ble_hci_trans_buf_alloc(BLE_HCI_TRANS_BUF_EVT_HI);
+    if (hci_ev) {
+        hci_ev->opcode = BLE_HCI_EVCODE_VENDOR_DEBUG;
+        hci_ev->length = 1;
+        hci_ev->data[0] = BLE_HCI_VS_SUBEV_AC_NEXT_PDU;
+        ble_ll_hci_event_send(hci_ev);
+    }
+}

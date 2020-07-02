@@ -66,6 +66,10 @@
  * crystal accuracy. Look at this in the spec.
  */
 
+/* JackBNimBLE */
+uint8_t custom_pdu_enabled = 0;
+uint8_t dummy_pdu[257];
+
 /* XXX: private header file? */
 extern uint8_t g_nrf_num_irks;
 extern uint32_t g_nrf_irk_list[];
@@ -276,6 +280,29 @@ struct nrf_ccm_data
 
 struct nrf_ccm_data g_nrf_ccm_data;
 #endif
+
+/* JackBNimBLE: 0 disable, 1 enable */
+void ble_phy_enable_custom_pdu(uint8_t enable)
+{
+    custom_pdu_enabled = enable;
+    memset(dummy_pdu, 0, sizeof(dummy_pdu));
+}
+
+uint8_t ble_phy_is_custom_pdu_enabled()
+{
+    return custom_pdu_enabled;
+}
+
+void ble_phy_set_ac_pdu_payload(uint8_t len, const uint8_t *payload)
+{
+    dummy_pdu[1] = len;
+    memcpy(&dummy_pdu[2], payload, 255);
+}
+
+void ble_phy_set_ac_pdu_header(uint8_t header)
+{
+    dummy_pdu[0] = header;
+}
 
 static void
 ble_phy_apply_errata_102_106_107(void)
@@ -1757,6 +1784,14 @@ ble_phy_tx(ble_phy_tx_pducb_t pducb, void *pducb_arg, uint8_t end_trans)
     dptr[0] = hdr_byte;
     dptr[1] = payload_len;
     dptr[2] = 0;
+
+    /* JackBNimBLE, if the flag is on, overwrite the packet content */
+    if (custom_pdu_enabled) {
+        dptr[0] = dummy_pdu[0];
+        dptr[1] = dummy_pdu[1];
+        payload_len = dummy_pdu[1];
+        memcpy(&dptr[3], &dummy_pdu[2], (uint32_t)(dummy_pdu[1]));
+    }
 
 #if MYNEWT_VAL(BLE_LL_CFG_FEAT_LE_ENCRYPTION)
     /* Start key-stream generation and encryption (via short) */
