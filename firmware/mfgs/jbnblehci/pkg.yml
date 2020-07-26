@@ -1,0 +1,5 @@
+pkg.name: "mfgs/jbnblehci"
+pkg.type: "mfg"
+pkg.description: "JackBNimBLE firmware with bootloader, manufacturing image"
+pkg.author: Veronica Kovah
+pkg.homepage: https://github.com/darkmentorllc/jackbnimble

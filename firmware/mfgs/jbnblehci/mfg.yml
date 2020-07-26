@@ -1,0 +1,12 @@
+mfg.bsp: "@apache-mynewt-core/hw/bsp/nordic_pca10056"
+mfg.targets:
+    - nrf52840_boot:
+      name: "targets/nrf52840_boot"
+      area: FLASH_AREA_BOOTLOADER
+      offset: 0x0
+    - jbnblehci:
+      name: "targets/jbnblehci"
+      area: FLASH_AREA_IMAGE_0
+      offset: 0x0
+mfg.meta:
+    area: FLASH_AREA_BOOTLOADER
