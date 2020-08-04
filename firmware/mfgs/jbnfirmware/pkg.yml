@@ -1,4 +1,4 @@
-pkg.name: "mfgs/jbnblehci"
+pkg.name: "mfgs/jbnfirmware"
 pkg.type: "mfg"
 pkg.description: "JackBNimBLE firmware with bootloader, manufacturing image"
 pkg.author: Veronica Kovah

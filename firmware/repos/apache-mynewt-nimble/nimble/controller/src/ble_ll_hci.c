@@ -686,9 +686,11 @@ ble_ll_is_valid_adv_mode(uint8_t ocf)
     case BLE_HCI_OCF_LE_SET_SCAN_ENABLE:
     case BLE_HCI_OCF_LE_SET_SCAN_RSP_DATA:
     case BLE_HCI_OCF_LE_RD_ADV_CHAN_TXPWR:
+        /* JackBNimBLE, a workaround
         if (hci_adv_mode == ADV_MODE_EXT) {
             return false;
         }
+        */
 
         hci_adv_mode = ADV_MODE_LEGACY;
         break;

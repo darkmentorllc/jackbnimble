@@ -6,7 +6,7 @@ Please follow the instructions to load the firmware onto a nrf52840 development
  board.
 
 ```
-$ nrfjprog -f nrf52 --program jackbnimble-mfgimg.hex --chiperase
+$ nrfjprog -f nrf52 --program jbnfirmware_mfgimg.hex --chiperase
 $ nrfjprog -f nrf52 --reset
 ```
 
@@ -21,8 +21,8 @@ You can download `nrfjprog` from https://www.nordicsemi.com/Software-and-tools/D
     $ cd {JackBNimBLE root}/firmware
     $ newt build nrf52840_boot
     $ newt build jbnblehci
-    $ newt create-image jbnblehci 0.0.1
-    $ newt mfg create jbnblehci 0.0.1
+    $ newt create-image jbnblehci 0.0.1.1
+    $ newt mfg create jbnfirmware 0.0.1.1
 ```
 
 
